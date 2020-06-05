@@ -6,7 +6,7 @@ git_source(:github) {|repo_name| "https://github.com/sharadcodes/jekyll-theme-mi
 
 # gem "rails"
 
-gem "jekyll", "~> 4.0"
+gem "jekyll", "~> 3.0"
 
 gem "jekyll-paginate", "~> 1.1"
 
