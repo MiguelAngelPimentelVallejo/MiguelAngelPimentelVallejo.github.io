@@ -1,13 +1,17 @@
 ---
-title: Jekyll post
+title: My fisrt post
 layout: post
-date: 2018-10-09
+date: 2020-06-05
 description: A complete post.
-image: 3.jpg
-categories: ["c"]
+image: first.png
+categories: ["Personal","Proob"]
 ---
 
-Text can be **bold**, _italic_, ~~strikethrough~~ or `keyword`
+# Hello this is my first post
+
+Here come more post I promise 
+
+<!-- Text can be **bold**, _italic_, ~~strikethrough~~ or `keyword`
 
 [Link to another page](./another-page.html).
 
@@ -107,4 +111,14 @@ Long, single-line code blocks should not wrap. They should horizontally scroll i
 
 ```
 The final element.
-```
+``` -->
+<!-- ---
+title: My fisrt post
+layout: post
+date: 2020-06-05
+description: A complete post.
+image: 3.jpg
+categories: ["Personal""Proob"]
+---
+
+-->
