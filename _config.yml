@@ -17,8 +17,8 @@ paginate: 5
 main_toc:
   - title: Home
     url: ""
-  - title: About
-    url: "about"
+  # - title: About
+  #   url: "about"
   - title: Author
     url: "author"
 

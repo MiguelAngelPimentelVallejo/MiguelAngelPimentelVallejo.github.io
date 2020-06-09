@@ -1,13 +1,13 @@
 ---
-title: My fisrt post
+title: My first post
 layout: post
 date: 2020-06-05
 description: A complete post.
-image: first.png
+image: 1.png
 categories: ["Personal","Proob"]
 ---
 
-# Hello this is my first post
+### Hello this is my first post
 
 Here come more post I promise 
 
@@ -103,7 +103,12 @@ end
 
 ### Small image
 
-![Octocat](https://assets-cdn.github.com/images/icons/emoji/octocat.png)
+![Octocat](https://drive.google.com/file/d/19ZYYM4cZhFOvyG-gVSXEPvwp6-uQXBB8/view?usp=sharing)
+
+despues del d/ viene el id 
+http://drive.google.com/uc?export=view&id=
+con esto se pueden poner imagenes desde mi google drive
+
 
 ```
 Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.

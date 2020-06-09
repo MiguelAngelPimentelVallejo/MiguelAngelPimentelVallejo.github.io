@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Miguel Angel Pimentel Vallejo | Embedded System for Hardware In the Loop (HIL) for generator</title>
+
+  <link href="/css/milo.css" rel="stylesheet">
+</head>
+
+<body>
+ <header role="banner">
+    <nav class="navbar navbar-expand-md navbar-light bg-white absolute-top">
+      <div class="container">
+
+        <button class="navbar-toggler order-2 order-md-1" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse order-3 order-md-2" id="navbar">
+          
+		  <ul class="navbar-nav mr-auto">
+		  
+			
+			    <li class="nav-item">
+			      <a class="nav-link" href="/">Home</a>
+			    </li>
+			
+			    <li class="nav-item">
+			      <a class="nav-link" href="/author">Author</a>
+			    </li>
+						
+          	</ul>
+		  
+        </div>
+
+        <a class="navbar-brand mx-auto order-1 order-md-3" href="">Miguel Angel Pimentel Vallejo</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <main class="main pt-4" role="main">
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-9">
+
+          <article class="card mb-4">
+		  
+            <header class="card-header text-center">
+			
+              <div class="card-meta">
+                <span>Published on 09 Jun 2020</time></span> in
+                  
+                  
+                  <a href="/categories/#HIL">HIL</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Microcontroller">Microcontroller</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#ESP-32">ESP-32</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#FreeRTOS">FreeRTOS</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#UDP-IP">UDP-IP</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Power Electronics">Power Electronics</a>
+                  
+                  
+              <div>
+			
+                <h1 class="card-title">Embedded System for Hardware In the Loop (HIL) for generator</h1>
+
+            </header>
+			
+			
+            <a style="cursor:pointer;">
+              <img class="card-img" src="/img/2.png" alt="" />
+            </a>
+            
+            
+            <div class="card-body">
+			<p>My thesis in the university were about design a physical module to make proofs with a generator in real time, but for explain this is some things to know after</p>
+
+<h3 id="real-time-simulation">Real Time Simulation</h3>
+<p>Real time refers to a system that is executing a task in the correct time, there is no a complete definition but with a example can make the things easier, when you make a simulation of a system one of the parameters to define is the simulation time, suppose this time is 10 seconds and you push play to the simulation but depending on of the size of the simulation this can take more or less time but this is not real time simulation because for real time the time who trans cure while run the simulation and the simulated time is the same, there more concepts behind this but for this post is enough</p>
+
+<h3 id="hardware-in-the-loop">Hardware In the loop</h3>
+<p>Imaging that you are making a real time simulation of a controller in your computer but the plant to control is real but with some special hardware you can apply the control to the plant, for example the plant is a DC motor, and the hardware who connect the computer and the motor is a micro controller (<strong>uC</strong>) like Arduino o ESP32, suppose than the uC have a transistor with this and a PWM signal can push energy in the motor and control the velocity and measure with a encoder, therefore the uC is a bridge between the DC motor and the computer, other supposition is that the uC is taking, measuring and sending the data with the same step time like the real time simulation because is important for all the functioning, to this fact than the controller or other system where is simulating in real time interacts with a physical system is called Hardware In the Loop (HIL)</p>
+
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1mRc50C0YnO3Zqrv73RNCleC813FCGJ1e" alt="HIL" /></p>
+
+<h3 id="description">Description</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>For my thesis, the plant who need controlled was a generator, because this can be used to simulated classic generators or wind turbines with the objective the analysis of the micro grid’s behave with this type of generation, the idea is make some of this modules to have a complete micro grid.</td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>The real time simulator was a <a href="https://www.opal-rt.com"><strong>OPAL-RT</strong></a>, because is so powerful and in the laboratory have one, this platform is like a normal computer but with more processors, hardware modules to connect and make HIL, modules with FPGA to make faster simulations and other tools to make awesome stuff, the OPAL-RT has a real time operating system based in RedHat but for programming a model can be used Simulink of MATLAB.</td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1xqcfsOcywY6LuXJX8rtlClYJ8KvfseUk" alt="OPAL-RT" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>OPAL-RT is so great, but in the laboratory don’t had modules to make HIL with the generator there is the first motivation to do the embedded system for my thesis, I have decisions to take, the first was the communication, I decided to use UDP-IP because this make the communication wireless and for the laboratory is more useful than other wired communication type, with this in my mind I selected the uC ESP32 because have WiFi, other decision to take is the programming of the uC I choose FreeR TOS to make a real time operating system and is compatible with the ESP32, is so much easier use this and secure that the step time is right, the diagram block of the module is</td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1b0zAn_L3T6AigljdqtGZX48s520tOKiD" alt="Module" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>The generator is composed for a mechanical union of a synchronous and DC machine, the synchronous is the generator and the DC motor supply the energy, with this configuration can control the frequency and amplitude of generating signal give us more versatility for the proofs, the union is like see in the next picture</td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1GOopUGWPFdLKZ33c7zn4IH6_0U895jsV" alt="Generator" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>To change the frecuency of the generated signal need to change the velocity of the DC motor, the amplitude change when the current of the rotor of the synchronous machine change</td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1-mhMcJEx6Y_7pGrrrw5hozwQ_v_6HYUu" alt="Generator" /></p>
+
+<p>With the uC ESP32 I design a embedded system with power electronics and instrumentation, the instrumentation to measure the velocity in the DC is only a amplifiquer conected to the tachometer of the DC machine, to measure the amplitude of the generated voltaje use a three phase rectifier and a voltaje divisor for reduce the high voltaje. For control the DC motor velocity use a IGBT conected in serie with the armature winding, the IGBT aperture is controller by the uC, and the rotor is conected to constant voltage, to control the current in the rotor of the synchronous machine is conected other IGBT in serie with the rotor of the sinchtonous machine
+|</p>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1XWTpJM3BpbBJXmmJLvS0E4Ky7PJqaOkS" alt="Embedded" /></p>
+<p>The embedded system when was finished
+|</p>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1mmdWIdjy4TlTnMibrfiDVIhzgzix5C9G" alt="Embedded_Real" /></p>
+<p>Finally charge a proprtional controller in the OPAL-RT, through the embedded system can control the frecuency and amplitude of the generated signal,the controller used was a PI</p>
+<p style="text-align: center;"><img src="http://drive.google.com/uc?export=view&amp;id=1zjRhcQbpJYDnhCr3UL5J_4uo8svo7OVe" alt="Final_proof" /></p>
+<p>The generated voltage is the first plot and the second is the frecuency, on the two figures the red signal is the reference, the yellow is the control output and the blue is the system output measure for the sensor.
+|
+All the system works well, there are details that no are in this post but if you want to learn more about who it’s possible do the system you can read my thesis, but is in spanish or can you contact me and can tell more for this post 
+|</p>
+<h3 id="source">Source</h3>
+<p><a href="https://drive.google.com/file/d/1ww709VOugeNuZYg-IciZjQr6zlR2SP11/view"><strong>Thesis</strong></a></p>
+
+            <hr />
+			<div class="pg-center">
+
+<div class="comments">
+  <h2>Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>
+var disqus_config = function () {
+  this.page.url = 'http://localhost:4000/hil/microcontroller/esp-32/freertos/udp-ip/power%20electronics/2020/06/09/Embedded-System-For-HIL.html'; // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = '/hil/microcontroller/esp-32/freertos/udp-ip/power%20electronics/2020/06/09/Embedded-System-For-HIL'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() {
+  var d = document, s = d.createElement('script');
+  s.src = '//disqus-demo-page.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
+
+</div>
+<style>
+.pg-center{
+background:#ffffff;
+padding-top:2rem;
+padding-bottom:2rem;
+margin-top:2rem;
+}
+</style>
+
+		<hr />		    
+            </div>
+          </article><!-- /.card -->
+        </div>
+		        <div class="col-md-3 ml-auto">
+
+          <aside class="sidebar">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title">About</h4>
+                <p class="card-text">It's about all things that I make</p>
+              </div>
+            </div>
+          </aside>
+
+		  
+          <aside class="sidebar sidebar-sticky">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title">Categories</h4>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Personal">
+                Personal,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Proob">
+                Proob,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#HIL">
+                HIL,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Microcontroller">
+                Microcontroller,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#ESP-32">
+                ESP-32,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#FreeRTOS">
+                FreeRTOS,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#UDP-IP">
+                UDP-IP,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Power Electronics">
+                Power Electronics</a>
+				
+              </div>
+            </div>
+            <div class="card mb-4">
+              <div class="card-body">
+                
+				<h4 class="card-title">Latest posts</h4>
+				
+                <a href="/hil/microcontroller/esp-32/freertos/udp-ip/power%20electronics/2020/06/09/Embedded-System-For-HIL.html" class="d-inline-block">
+                  <h4 class="h6">Embedded System for Hardware In the Loop (HIL) for generator</h4>
+                  
+				  <img class="card-img" src="/img/2.png" alt="" />
+				  
+                </a>
+				<br />
+                <time>On 09 Jun 2020</time> in HIL
+				<hr />
+				
+                <a href="/personal/proob/2020/06/05/First-Post.html" class="d-inline-block">
+                  <h4 class="h6">My first post</h4>
+                  
+				  <img class="card-img" src="/img/1.png" alt="" />
+				  
+                </a>
+				<br />
+                <time>On 05 Jun 2020</time> in Personal
+				<hr />
+				
+              </div>
+            </div>
+          </aside>
+
+        </div>
+	
+      </div>
+    </div>
+  </main>
+<!--   <div class="site-newsletter">
+    <div class="container">
+      <div class="text-center">
+        <h3 class="h4 mb-2">Subscribe to our newsletter</h3>
+        <p class="text-muted">Join our monthly newsletter and never miss out on new stories and promotions.</p>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5 ml-auto mr-auto">
+            <div class="input-group mb-3 mt-3">
+              <input type="text" class="form-control" placeholder="Email address" aria-label="Email address">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Subscribe</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ -->
+  <footer class="site-footer bg-darkest" role="contentinfo">
+    <div class="container">
+
+<!--       <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Privacy policy</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Feedback</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul> -->
+      <div class="copy">
+        &copy; Miguel Angel Pimentel Vallejo 2019<br />
+        All rights reserved
+      </div>
+    </div>
+  </footer>
+  
+  <script src="/js/bundle.js"></script>
+
+</body>
+</html>
