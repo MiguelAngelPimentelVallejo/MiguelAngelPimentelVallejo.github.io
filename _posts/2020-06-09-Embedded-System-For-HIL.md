@@ -63,8 +63,8 @@ Finally charge a proprtional controller in the OPAL-RT, through the embedded sys
 ![Final_proof](https://drive.google.com/uc?export=view&id=1zjRhcQbpJYDnhCr3UL5J_4uo8svo7OVe)
 {: refdef}
 The generated voltage is the first plot and the second is the frecuency, on the two figures the red signal is the reference, the yellow is the control output and the blue is the system output measure for the sensor.
-|
-All the system works well, there are details that no are in this post but if you want to learn more about who it's possible do the system you can read my thesis, but is in spanish or can you contact me and can tell more for this post 
-|
+
+All the system works well, there are details that no are in this post but if you want to learn more about who it's possible do the system you can read my thesis, but is in spanish or can you contact me and can tell more for this post|
+
 ### Source
 [**Thesis**](https://drive.google.com/file/d/1ww709VOugeNuZYg-IciZjQr6zlR2SP11/view)
