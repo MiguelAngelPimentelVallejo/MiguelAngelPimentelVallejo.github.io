@@ -97,7 +97,7 @@
 <h3 id="hardware-in-the-loop">Hardware In the loop</h3>
 <p>Imaging that you are making a real time simulation of a controller in your computer but the plant to control is real but with some special hardware you can apply the control to the plant, for example the plant is a DC motor, and the hardware who connect the computer and the motor is a micro controller (<strong>uC</strong>) like Arduino o ESP32, suppose than the uC have a transistor with this and a PWM signal can push energy in the motor and control the velocity and measure with a encoder, therefore the uC is a bridge between the DC motor and the computer, other supposition is that the uC is taking, measuring and sending the data with the same step time like the real time simulation because is important for all the functioning, to this fact than the controller or other system where is simulating in real time interacts with a physical system is called Hardware In the Loop (HIL)</p>
 
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1mRc50C0YnO3Zqrv73RNCleC813FCGJ1e" alt="HIL" /></p>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_1.png" alt="HIL" /></p>
 
 <h3 id="description">Description</h3>
 
@@ -117,7 +117,7 @@
     </tr>
   </tbody>
 </table>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1xqcfsOcywY6LuXJX8rtlClYJ8KvfseUk" alt="OPAL-RT" /></p>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_2.jpg" alt="OPAL-RT" /></p>
 
 <table>
   <tbody>
@@ -129,7 +129,7 @@
     </tr>
   </tbody>
 </table>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1b0zAn_L3T6AigljdqtGZX48s520tOKiD" alt="Module" /></p>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_3.jpg" alt="Module" /></p>
 
 <table>
   <tbody>
@@ -141,37 +141,49 @@
     </tr>
   </tbody>
 </table>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1GOopUGWPFdLKZ33c7zn4IH6_0U895jsV" alt="Generator" /></p>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_4.png" alt="Generator" /></p>
+
+<p>To change the frequency of the generated signal need to change the velocity of the DC motor, the amplitude change when the current of the rotor of the synchronous machine change</p>
 
 <table>
   <tbody>
     <tr>
-      <td>To change the frecuency of the generated signal need to change the velocity of the DC motor, the amplitude change when the current of the rotor of the synchronous machine change</td>
-    </tr>
-    <tr>
-      <td> </td>
     </tr>
   </tbody>
 </table>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1-mhMcJEx6Y_7pGrrrw5hozwQ_v_6HYUu" alt="Generator" /></p>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_5.png" alt="Generator" /></p>
 
-<p>With the uC ESP32 I design a embedded system with power electronics and instrumentation, the instrumentation to measure the velocity in the DC is only a amplifiquer conected to the tachometer of the DC machine, to measure the amplitude of the generated voltaje use a three phase rectifier and a voltaje divisor for reduce the high voltaje. For control the DC motor velocity use a IGBT conected in serie with the armature winding, the IGBT aperture is controller by the uC, and the rotor is conected to constant voltage, to control the current in the rotor of the synchronous machine is conected other IGBT in serie with the rotor of the sinchtonous machine
-|</p>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1XWTpJM3BpbBJXmmJLvS0E4Ky7PJqaOkS" alt="Embedded" /></p>
-<p>The embedded system when was finished
-|</p>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1mmdWIdjy4TlTnMibrfiDVIhzgzix5C9G" alt="Embedded_Real" /></p>
-<p>Finally charge a proprtional controller in the OPAL-RT, through the embedded system can control the frecuency and amplitude of the generated signal,the controller used was a PI</p>
-<p style="text-align: center;"><img src="https://drive.google.com/uc?export=view&amp;id=1zjRhcQbpJYDnhCr3UL5J_4uo8svo7OVe" alt="Final_proof" /></p>
-<p>The generated voltage is the first plot and the second is the frecuency, on the two figures the red signal is the reference, the yellow is the control output and the blue is the system output measure for the sensor.</p>
+<p>With the uC ESP32 I design a embedded system with power electronics and instrumentation, the instrumentation to measure the velocity in the DC is only a amplifiquer connected to the tachometer of the DC machine, to measure the amplitude of the generated voltage use a three phase rectifier and a voltage divisor for reduce the high voltage. For control the DC motor velocity use a IGBT connected in serie with the armature winding, the IGBT aperture is controller by the uC, and the rotor is conected to constant voltage, to control the current in the rotor of the synchronous machine is conected other IGBT in serie with the rotor of the sinchronous machine</p>
 
 <table>
   <tbody>
     <tr>
-      <td>All the system works well, there are details that no are in this post but if you want to learn more about who it’s possible do the system you can read my thesis, but is in spanish or can you contact me and can tell more for this post</td>
     </tr>
   </tbody>
 </table>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_6.png" alt="Embedded" /></p>
+<p>The embedded system when was finished</p>
+
+<table>
+  <tbody>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_7.jpg" alt="Embedded_Real" /></p>
+<p>Finally charge a poportional controller in the OPAL-RT, through the embedded system can control the frequency and amplitude of the generated signal, the controller used was a PI</p>
+<p style="text-align: center;"><img src="/assets/Embedded-system-for-HIL/Figure_8.png" alt="Final_proof" /></p>
+<p>The generated voltage is the first plot and the second is the frequency, on the two figures the red signal is the reference, the yellow is the control output and the blue is the system output measure for the sensor.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>All the system works well, there are details that no is in this post but if you want to learn more about who it’s possible do the embedded system only you need read my thesis, but is in Spanish or can you contact me and can tell more for this post</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ![My helpful screenshot](/assets/Embedded-system-for-HIL/Figure_1.png) -->
 
 <h3 id="source">Source</h3>
 <p><a href="https://drive.google.com/file/d/1ww709VOugeNuZYg-IciZjQr6zlR2SP11/view"><strong>Thesis</strong></a></p>
