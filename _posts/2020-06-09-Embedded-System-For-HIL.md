@@ -30,16 +30,17 @@ The real time simulator was a [**OPAL-RT**](https://www.opal-rt.com), because is
 {: refdef}
 
 
-OPAL-RT is so great, but in the laboratory don't had modules to make HIL with the generator there is the first motivation to do the embedded system for my thesis, I have decisions to take, the first was the communication, I decided to use UDP-IP because this make the communication wireless and for the laboratory is more useful than other wired communication type, with this in my mind I selected the uC ESP32 because have WiFi, other decision to take is the programming of the uC I choose FreeR TOS to make a real time operating system and is compatible with the ESP32, is so much easier use this and secure that the step time is right, the diagram block of the module is |
+OPAL-RT is so great, but in the laboratory don't had modules to make HIL with the generator there is the first motivation to do the embedded system for my thesis, I have decisions to take, the first was the communication, I decided to use UDP-IP because this make the communication wireless and for the laboratory is more useful than other wired communication type, with this in my mind I selected the uC ESP32 because have WiFi, other decision to take is the programming of the uC I choose [**FreeRTOS**](https://www.freertos.org/) to make a real time operating system and is compatible with the ESP32, is so much easier use this and secure that the step time is right, the diagram block of the module is |
 |
 {:refdef: style="text-align: center;"}
-![Module](/assets/Embedded-system-for-HIL/Figure_3.jpg)
+![Module](/assets/Embedded-system-for-HIL/Figure_4.png)
 {: refdef}
 
-The generator is composed for a mechanical union of a synchronous and DC machine, the synchronous is the generator and the DC motor supply the energy, with this configuration can control the frequency and amplitude of generating signal give us more versatility for the proofs, the union is like see in the next picture |
+The generator is composed for a mechanical union of a synchronous and DC machine, the synchronous is the generator and the DC motor supply the energy, with this configuration can control the frequency and amplitude of generating signal give us more versatility for the proofs, the union is like see in the next picture 
+
 |
 {:refdef: style="text-align: center;"}
-![Generator](/assets/Embedded-system-for-HIL/Figure_4.png)
+![Generator](/assets/Embedded-system-for-HIL/Figure_3.jpg)
 {: refdef}
 
 To change the frequency of the generated signal need to change the velocity of the DC motor, the amplitude change when the current of the rotor of the synchronous machine change
@@ -69,7 +70,6 @@ The generated voltage is the first plot and the second is the frequency, on the 
 
 All the system works well, there are details that no is in this post but if you want to learn more about who it's possible do the embedded system only you need read my thesis, but is in Spanish or can you contact me and can tell more for this post|
 
-<!-- ![My helpful screenshot](/assets/Embedded-system-for-HIL/Figure_1.png) -->
 
 ### Source
 [**Thesis**](https://drive.google.com/file/d/1ww709VOugeNuZYg-IciZjQr6zlR2SP11/view)
