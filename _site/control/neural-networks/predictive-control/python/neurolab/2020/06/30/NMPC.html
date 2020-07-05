@@ -371,12 +371,21 @@
 <h3 id="conclusions-and-observations">Conclusions and observations</h3>
 
 <ul>
-  <li>The cost function</li>
-  <li>In the original paper in the cost function consider the change in the input <script type="math/tex">\Delta u</script>. If cant affect the control input. For example in the beginning of the action control is a pick behold 500, this can change if consider the <script type="math/tex">\Delta u</script> in the cost function.</li>
-  <li>The input and the system</li>
-  <li>The control input increase with the time, but if the input increase the state <script type="math/tex">h</script> go to zero and uncontrollable. This is because the state <script type="math/tex">h</script> are denominator in the part of the inputs of the state <script type="math/tex">C_b</script>.</li>
-  <li>Comparison with MATLAB result</li>
-  <li>In parte this simulation is the same or trying to be the same as the example in MATLAB called <a href="https://www.mathworks.com/help/deeplearning/ug/design-neural-network-predictive-controller-in-simulink.html#:~:text=The%20controller%20consists%20of%20the,described%20in%20the%20following%20section."><strong><u> design neural network predictive controller in simulink </u></strong></a>. The result aren’t the same. This can be because the cost function no are the same or in the MATLAB example use more than one future prediction and input.</li>
+  <li>The cost function:
+    <ul>
+      <li>In the original paper in the cost function consider the change in the input <script type="math/tex">\Delta u</script>. If cant affect the control input. For example in the beginning of the action control is a pick behold 500 this can change if consider the <script type="math/tex">\Delta u</script> in the cost function.</li>
+    </ul>
+  </li>
+  <li>The input and the system:
+    <ul>
+      <li>The control input increase with the time, but if the input increase the state <script type="math/tex">h</script> go to zero and uncontrollable. This is because the state <script type="math/tex">h</script> are denominator in the part of the inputs of the state <script type="math/tex">C_b</script>.</li>
+    </ul>
+  </li>
+  <li>Comparison with MATLAB result:
+    <ul>
+      <li>In parte this simulation is the same or trying to be the same as the example in MATLAB called <a href="https://www.mathworks.com/help/deeplearning/ug/design-neural-network-predictive-controller-in-simulink.html#:~:text=The%20controller%20consists%20of%20the,described%20in%20the%20following%20section."><strong><u> design neural network predictive controller in simulink </u></strong></a>. The result aren’t the same. This can be because the cost function no are the same or in the MATLAB example use more than one future prediction and input.</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="references">References</h3>
