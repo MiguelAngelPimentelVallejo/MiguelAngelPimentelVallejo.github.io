@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Miguel Angel Pimentel Vallejo | Neural Generalized Predictive Control</title>
+
+  <link href="/css/milo.css" rel="stylesheet">
+
+  <!-- Load jQuery -->
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <!-- Load KaTeX -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.js"></script>
+ 
+</head>
+
+<body>
+ <header role="banner">
+    <nav class="navbar navbar-expand-md navbar-light bg-white absolute-top">
+      <div class="container">
+
+        <button class="navbar-toggler order-2 order-md-1" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse order-3 order-md-2" id="navbar">
+          
+		  <ul class="navbar-nav mr-auto">
+		  
+			
+			    <li class="nav-item">
+			      <a class="nav-link" href="/">Home</a>
+			    </li>
+			
+			    <li class="nav-item">
+			      <a class="nav-link" href="/author">Author</a>
+			    </li>
+						
+          	</ul>
+		  
+        </div>
+
+        <a class="navbar-brand mx-auto order-1 order-md-3" href="">Miguel Angel Pimentel Vallejo</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <main class="main pt-4" role="main">
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-9">
+
+          <article class="card mb-4">
+		  
+            <header class="card-header text-center">
+			
+              <div class="card-meta">
+                <span>Published on 30 Jun 2020</time></span> in
+                  
+                  
+                  <a href="/categories/#Control">Control</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Neural-Networks">Neural-Networks</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Predictive-Control">Predictive-Control</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Python">Python</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Neurolab">Neurolab</a>
+                  
+                  
+              <div>
+			
+                <h1 class="card-title">Neural Generalized Predictive Control</h1>
+
+            </header>
+			
+			
+            <a style="cursor:pointer;">
+              <img class="card-img" src="/img/3.png" alt="" />
+            </a>
+            
+            
+            <div class="card-body">
+			<p>In this post, I show how to do simple a Neural Generalized Predictive Control (<strong>NGPC</strong>) using Neurolab in python, To do this post I’m basing in the paper <a href="https://www.researchgate.net/publication/3668550_Neural_generalized_predictive_control"><strong><u>Neural Generalized Predictive Control A Newton-Raphson Implementation of Donald Soloway and Pamela J. Haley</u></strong></a>
+. If you want to know more about of state of the art of this techniques you can read the paper. In this post only show a bit of theory and the implementation of the simulation. All the training and simulation is made with Python using neurolab, numpy, matplotlib, random and scipy packages.</p>
+
+<h3 id="neural-generalized-predictive-control">Neural Generalized Predictive Control</h3>
+<p>The NGPC is based in a Model Predictive Control (<strong>MPC</strong>) the difference is that the NGPC use a Artificial Neural Network (<strong>ANN</strong>) to do the prediction of the system. An ANN predict the next state of the system, with this prediction calculate the control input <script type="math/tex">u(t)</script> to follow a reference <script type="math/tex">Ref(t)</script>. The control input calculated based in a cost function <script type="math/tex">J</script> and used a algorithm to minimization. A block diagram of NGPC is</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-1.png" alt="Diagram-of-control" /></p>
+
+<h3 id="ann-to-predict">ANN to predict</h3>
+
+<p>The architecture of the network is like show the next image</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-2.png" alt="Diagram-of-ANN" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>The input layer have to inputs, the input of the system <script type="math/tex">u(t)</script> and the actual system state <script type="math/tex">y(t)</script>. For this layer need to find the weights <script type="math/tex">w_1</script>, <script type="math/tex">w_2</script> and the bias <script type="math/tex">b_1</script>. The activation function is a <script type="math/tex">tanh()</script>. For the output layer only need the weight <script type="math/tex">w_3</script> and the bias <script type="math/tex">b_2</script>. The activation function is a linear function. The ANN returns the predicted value of the output <script type="math/tex">y_n</script></td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The algorithms used to training the ANN is a gradient descent backpropagation, in neurolab this algorithms correspond to the training function <strong>train_gd()</strong>. The error function selected is the Mean Absolute Error (<strong>MAE</strong>) the equation is</p>
+
+<p style="text-align: center;"><script type="math/tex">e_{MAE} = \frac{1}{N} \sum \left| y(n+1) - y_n(n) \right|</script></p>
+
+<p>Where <script type="math/tex">N</script> is number of data points,  <script type="math/tex">y_n</script> is the prediction of the ANN and <script type="math/tex">y(n+1)</script> is the next value of the state. The function error in neurolab is <strong>error.MAE</strong>. If you want learn more of the training algorithms and errors function can consult the <a href="https://pythonhosted.org/neurolab/lib.html"><strong><u>documentation of neurolab</u></strong></a>.</p>
+
+<h3 id="cost-function-minimization">Cost function minimization</h3>
+
+<p>The cost function proposed is</p>
+
+<p style="text-align: center;"><script type="math/tex">J = \left[ Ref(n) - y_n(n) \right]^2</script></p>
+
+<p>This function is minimized with a Newton-Raphson method. Therefore the next control input  <script type="math/tex">u(n+1)</script> is calculated as</p>
+
+<p style="text-align: center;"><script type="math/tex">u(n+1) = u(n) + \frac{J_u}{J_{uu}}</script></p>
+
+<p>Where <script type="math/tex">J_u</script> and <script type="math/tex">J_{uu}</script> are the first and the second derivatives w.r.t. <script type="math/tex">u</script> of <script type="math/tex">J</script> respectively. Calculate the <script type="math/tex">J_u</script> obtain</p>
+
+<p style="text-align: center;"><script type="math/tex">J_u = -2 \left[ Ref(n +1) - y_n(n+1) \right] \frac{\partial y(n+1)}{\partial u(n+1)}</script></p>
+
+<p>The second derivative is</p>
+
+<p style="text-align: center;"><script type="math/tex">J_{uu} = 2\left[ \frac{\partial y(n+1)}{\partial u(n+1)}^2 - \frac{\partial^2 y(n+1)}{\partial u(n+1)^2} \left[ Ref(n +1) - y_n(n+1) \right] \right]</script></p>
+
+<p>To calculate the input control need the derivatives of <script type="math/tex">y_n</script> w.r.t. <script type="math/tex">u</script>, the prediction value is obtained of the ANN therefore can write</p>
+
+<p style="text-align: center;"><script type="math/tex">y_n(n+1) = w3\left( tanh\left( w_1y(n+1) + w_2u(n+1) + b_1 \right) \right) + b_2</script></p>
+
+<p>Derivating the function, give the next result</p>
+
+<p style="text-align: center;"><script type="math/tex">\frac{\partial y(n+1)}{\partial u(n+1)} = w_3\ w_2\ sech^2(\ b_1 + y\ w_1 + u\ w_2\ )</script></p>
+
+<p>The second derivative is</p>
+
+<p style="text-align: center;"><script type="math/tex">\frac{\partial^2 y(n+1)}{\partial u(n+1)^2} = -2w_3w_2^2tanh(b_1 + y\ w_1 + u\ w_2)sech^2(b_1 + y\ w_1 + u\ w_2)</script></p>
+
+<p>With this equations we can calculate the control input.</p>
+
+<h3 id="simulation">Simulation</h3>
+
+<p>For the simulation the model use is a catalytic <a href="https://www.mathworks.com/help/deeplearning/ug/design-neural-network-predictive-controller-in-simulink.html#:~:text=The%20controller%20consists%20of%20the,described%20in%20the%20following%20section."><strong><u>Continuous Stirred Tank Reactor</u></strong></a> (<strong>CSTR</strong>) taken from MATLAB documentation, but all the simulation was programming in Python. The equations of the system are</p>
+
+<p style="text-align: center;"><script type="math/tex">\dot{h} = w_1 + w_2 - 0.2\sqrt{h}</script></p>
+
+<p style="text-align: center;"><script type="math/tex">\dot{C_b} = (C_{b_1}-C_b)\frac{w_1}{h} + (C_{b_2}-C_b)\frac{w_2}{h} - \frac{k_aC_b}{\left(1+k_2C_b\right)^2}</script></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Where <script type="math/tex">h</script> is the water level, <script type="math/tex">C_b</script> is the level of the concentration at the output process, <script type="math/tex">w_1</script> is the flow rate of the concentrated feed <script type="math/tex">C_{b1}</script> and <script type="math/tex">w_2</script> is the flow rate of the diluted feed <script type="math/tex">C_{b2}</script>. The inputs are <script type="math/tex">w_1</script> and <script type="math/tex">w_2</script>. The constants values are <script type="math/tex">C_{b1} = 24.9</script>, <script type="math/tex">C_{b2} = 0.1</script>, <script type="math/tex">k_1 = 1</script> and <script type="math/tex">k_2 = 1</script>, the input <script type="math/tex">w_2</script> for this simulation is constant <script type="math/tex">w_2 = 0.1</script> and the water level <script type="math/tex">h</script> is no controlled only the <script type="math/tex">C_b</script>.</td>
+    </tr>
+    <tr>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Use a function in the code for simulate the system</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Function with the model to simulate
+</span><span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
+   <span class="c1"># Derivatives vector
+</span>   <span class="n">xdot</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+ 
+   <span class="c1"># Parameter of the system
+</span>   <span class="n">Cb1</span> <span class="o">=</span> <span class="mf">24.9</span>
+   <span class="n">Cb2</span> <span class="o">=</span> <span class="mf">0.1</span>
+   <span class="n">k1</span> <span class="o">=</span> <span class="mi">1</span>
+   <span class="n">k2</span> <span class="o">=</span> <span class="mi">1</span>
+ 
+   <span class="c1"># Constant input
+</span>   <span class="n">w2</span> <span class="o">=</span> <span class="mf">0.2</span>
+ 
+   <span class="c1"># Dynamic input
+</span>   <span class="n">w1</span> <span class="o">=</span> <span class="n">u</span>
+ 
+   <span class="c1"># Calculate the states of the system
+</span>   <span class="n">xdot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">w2</span> <span class="o">-</span> <span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+   <span class="n">xdot</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Cb1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">w1</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">Cb2</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">w2</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="p">(</span><span class="n">k1</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">k2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+ 
+   <span class="k">return</span> <span class="n">xdot</span>
+</code></pre></div></div>
+<p>The function <strong>model</strong> get a actual estate <strong>x</strong>, the time <strong>t</strong> and the input <script type="math/tex">w_1</script> as <strong>u</strong>, the function returns the derivative of the system <strong>xdot</strong>. With this function can use the solver of sympy <strong>odeint</strong></p>
+
+<p>For the training inject a random signal. The code for the random signal was extract of this <a href="https://www.geeksforgeeks.org/random-walk-implementation-python/"><strong><u>post</u></strong></a></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">random_reference</span><span class="p">(</span><span class="n">size_of</span><span class="p">):</span>
+   <span class="c1"># Probability to move up or down
+</span>   <span class="n">prob</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]</span>
+ 
+   <span class="c1"># statically defining the starting position
+</span>   <span class="n">start</span> <span class="o">=</span> <span class="mi">2</span>
+   <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
+ 
+   <span class="c1"># creating the random points
+</span>   <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size_of</span><span class="p">)</span>
+   <span class="n">downp</span> <span class="o">=</span> <span class="n">rr</span> <span class="o">&lt;</span> <span class="n">prob</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="n">upp</span> <span class="o">=</span> <span class="n">rr</span> <span class="o">&gt;</span> <span class="n">prob</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+ 
+ 
+   <span class="k">for</span> <span class="n">idownp</span><span class="p">,</span> <span class="n">iupp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">downp</span><span class="p">,</span> <span class="n">upp</span><span class="p">):</span>
+       <span class="n">down</span> <span class="o">=</span> <span class="n">idownp</span> <span class="ow">and</span> <span class="n">positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span>
+       <span class="n">up</span> <span class="o">=</span> <span class="n">iupp</span> <span class="ow">and</span> <span class="n">positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">4</span>
+       <span class="n">positions</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">down</span> <span class="o">+</span> <span class="n">up</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">positions</span>
+</code></pre></div></div>
+<p>The function <strong>random_reference</strong> get the length of the random signal and return a random signal. The max value of the signal is <script type="math/tex">4</script> because the system CSTR for higher values make the state <script type="math/tex">h</script> zero.</p>
+
+<p>The code for the simulation use the solver odeint is</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># initial condition
+</span><span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">23</span><span class="p">]</span>
+ 
+<span class="c1"># time vector
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3000</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+ 
+<span class="c1"># Random input
+</span><span class="n">u</span> <span class="o">=</span> <span class="n">random_reference</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+ 
+<span class="c1"># Vector to save the result
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">x0</span><span class="p">])</span>
+ 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+   <span class="c1"># Delat time
+</span>   <span class="n">t_delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+ 
+   <span class="c1"># Integrate one step
+</span>   <span class="n">xint</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">t_delta</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">],))</span>
+  
+   <span class="c1"># Save de result for the next step
+</span>   <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">xint</span><span class="p">[</span><span class="mi">1</span><span class="p">]])),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The input <script type="math/tex">w_1</script> and the output <script type="math/tex">C_b</script> save in arrays. The simulation have a duration of 3000 seconds. The initial values are <script type="math/tex">h(0) = 1</script> and <script type="math/tex">C_t(0) = 23</script>. Plotting the simulation have the next result</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-3.png" alt="System with random input" /></p>
+
+<p>The next step is the training. First prepare the data shifting one position the output array <strong>x</strong> to have the future values, so that lost a value therefore the training use 2999 data points.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Prepare the data for training
+</span><span class="n">datainp</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">append</span><span class="p">(</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">].</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">datatar</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="mi">1</span><span class="p">].</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+<p>The <strong>datainp</strong> array have the input an the output in the present and the array <strong>datatar</strong> have the future value of the system. Then propose the ANN</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Set a ANN with two inputs, one hidden layer and one output layer
+</span><span class="n">net</span> <span class="o">=</span> <span class="n">nl</span><span class="p">.</span><span class="n">net</span><span class="p">.</span><span class="n">newff</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],[</span><span class="n">nl</span><span class="p">.</span><span class="n">trans</span><span class="p">.</span><span class="n">TanSig</span><span class="p">(),</span><span class="n">nl</span><span class="p">.</span><span class="n">trans</span><span class="p">.</span><span class="n">PureLin</span><span class="p">()])</span>
+ 
+<span class="c1"># Set the initial value to the weights
+</span><span class="n">net</span><span class="p">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">np</span><span class="p">[</span><span class="s">'w'</span><span class="p">][:]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">net</span><span class="p">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">np</span><span class="p">[</span><span class="s">'w'</span><span class="p">][:]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">net</span><span class="p">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">np</span><span class="p">[</span><span class="s">'b'</span><span class="p">][:]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="p">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">np</span><span class="p">[</span><span class="s">'b'</span><span class="p">][:]</span> <span class="o">=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p>Define the ANN with two inputs, two layers and the activation functions proposed. The initial values for the training are <script type="math/tex">w_1 = w_2 = w_3 = 0</script> and <script type="math/tex">b_1 = b_2 = 0</script>. Next have to train the ANN</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Change error function
+</span><span class="n">net</span><span class="p">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">nl</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">MAE</span>
+ 
+<span class="c1"># Train network
+</span><span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">train</span><span class="p">(</span><span class="n">datainp</span><span class="p">,</span> <span class="n">datatar</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">goal</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+ 
+<span class="c1"># Simulate network
+</span><span class="n">out</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">sim</span><span class="p">(</span><span class="n">datainp</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Set the error function as MAE. Define the maximum number of epochs in 200 and the goal of the training as a 0.1. After the training proof the ANN with the same dataset. Plotting the error vs epochs have</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-4.png" alt="Error through epochs" /></p>
+
+<p>The error in the final epoch is around 0.9. Then plot the ANN prediction and the system output with the same random input</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-5.png" alt="System and ANN" /></p>
+
+<p>The ANN prediction is precise. The final weights values are <script type="math/tex">w_1 = 1.2482e-02</script>, <script type="math/tex">w_2 = 2.5146e-04</script>, <script type="math/tex">w_3 = 2.1492e+02</script>, <script type="math/tex">b_1 = 0.831</script> and <script type="math/tex">b_2 = -150.5797</script>. Once the ANN predict the system the follow part is make the cost function minimization, for do that make a function</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Cost Function
+</span><span class="k">def</span> <span class="nf">cost_fun_min</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yn</span><span class="p">,</span><span class="n">ym</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">w1</span><span class="p">,</span><span class="n">w2</span><span class="p">,</span><span class="n">w3</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">):</span>
+ 
+   <span class="n">com_arg</span> <span class="o">=</span> <span class="n">b1</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">w1</span> <span class="o">+</span> <span class="n">u</span><span class="o">*</span><span class="n">w2</span>
+   <span class="n">dyn_du</span> <span class="o">=</span> <span class="n">w3</span><span class="o">*</span><span class="n">w2</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">cosh</span><span class="p">(</span><span class="n">com_arg</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+   <span class="n">d2yn_du2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">w3</span><span class="o">*</span><span class="p">(</span><span class="n">w2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">com_arg</span><span class="p">))</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">cosh</span><span class="p">(</span><span class="n">com_arg</span><span class="p">)))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+   <span class="n">dJ_dU</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">ym</span> <span class="o">-</span> <span class="n">yn</span><span class="p">)</span><span class="o">*</span><span class="n">dyn_du</span> <span class="o">-</span> <span class="n">s</span><span class="o">/</span><span class="p">((</span><span class="n">u</span> <span class="o">+</span> <span class="n">r</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">/</span><span class="p">((</span><span class="n">r</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+   <span class="n">d2J_dU2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">((</span><span class="n">dyn_du</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">d2yn_du2</span><span class="o">*</span><span class="p">(</span><span class="n">ym</span> <span class="o">-</span> <span class="n">yn</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">u</span> <span class="o">+</span> <span class="n">r</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">r</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+   <span class="n">u_next</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-</span> <span class="n">dJ_dU</span><span class="o">/</span><span class="n">d2J_dU2</span>
+ 
+   <span class="k">if</span> <span class="n">u_next</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+       <span class="n">u_next</span> <span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">u_next</span>
+ 
+   <span class="k">return</span> <span class="n">u_next</span>
+</code></pre></div></div>
+<p>The function first calculated a common argument that have many functions, next the first derivative of <script type="math/tex">y_n</script> w.r.t. <script type="math/tex">u</script>, then the second derivative of <script type="math/tex">y_n</script> w.r.t. <script type="math/tex">u</script>, next the first derivative of <script type="math/tex">J</script> w.r.t. <script type="math/tex">u</script>, then the second derivative of <script type="math/tex">J</script> w.r.t. <script type="math/tex">u</script>, then calculated the next input with Newton-Raphson method finally only take the positives values input because the system doesn’t support negatives values because the state <script type="math/tex">\dot{h}</script> have a square.</p>
+
+<p>For the simulation of all NGPC first set the initial conditions, in code is</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Initial conditions
+</span><span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+ 
+<span class="c1"># Time vector
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tf</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+ 
+<span class="c1"># Reference for the system
+</span><span class="n">ym</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mf">20.5</span><span class="p">])</span>
+ 
+<span class="c1"># Initial condition for the input
+</span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">]])</span>
+ 
+<span class="c1"># Vector to save the result
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">x0</span><span class="p">])</span>
+ 
+<span class="c1"># Predict value
+</span><span class="n">xp</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]]])</span>
+</code></pre></div></div>
+<p>The total time of the simulation is 1000 seconds, the references are four constant values, each constant hold for a quarter of the time (250 seconds), the values are <script type="math/tex">Ref_1 = 19</script>, <script type="math/tex">Ref_2 = 20</script>, <script type="math/tex">Ref_3 = 21</script> and <script type="math/tex">Ref_4 = 20.5</script>. The initial values for the states are <script type="math/tex">h = C_b = 0</script>. Also create a vector for save the values of the input of control <strong>u</strong>, the output of the system <strong>x</strong> and the predicted value for the ANN <strong>xp</strong>. To solve the system use again odeint of scipy as show in</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+   <span class="c1"># Delay time
+</span>   <span class="n">t_delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+ 
+   <span class="c1"># Integrate one step
+</span>   <span class="n">xint</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">t_delta</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],))</span>
+  
+   <span class="c1"># Predict the system with Neural Network
+</span>   <span class="n">yn</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">sim</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([[</span><span class="n">xint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]]))</span>
+    <span class="c1"># Calculating next input
+</span>   <span class="n">u_next</span> <span class="o">=</span> <span class="n">cost_fun_min</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">xint</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">yn</span><span class="p">,</span><span class="n">ym</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">10e-20</span><span class="p">,</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+ 
+   <span class="c1"># Save de result for the next step
+</span>   <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">xint</span><span class="p">[</span><span class="mi">1</span><span class="p">]])),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+   <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">u</span><span class="p">,</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_next</span><span class="p">)),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+   <span class="n">xp</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">xp</span><span class="p">,</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">yn</span><span class="p">)),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+<p>For the simulation the constant values of cost function are <script type="math/tex">s = 10e-20</script>, <script type="math/tex">b = 10</script> and <script type="math/tex">r = 10</script>. Plotting the output of the system <script type="math/tex">y</script> and the reference <script type="math/tex">Ref</script> have the follow graph</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-6.png" alt="Reference vs system" /></p>
+
+<p>Other plot to see, is the comparison between the ANN prediction <script type="math/tex">y_n</script> and the output of the system <script type="math/tex">y</script></p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-7.png" alt="ANN vs system" /></p>
+
+<p>All the system with input control <script type="math/tex">u</script>, the states <script type="math/tex">h</script> and <script type="math/tex">C_b</script> is showed in the next plot</p>
+
+<p style="text-align: center;"><img src="/assets/Neural-Generalized-Predictive-Control/Figure-8.png" alt="System with NGPC" /></p>
+
+<p>This is all the simulation</p>
+
+<h3 id="conclusions-and-observations">Conclusions and observations</h3>
+
+<ul>
+  <li>The cost function</li>
+  <li>In the original paper in the cost function consider the change in the input <script type="math/tex">\Delta u</script>. If cant affect the control input. For example in the beginning of the action control is a pick behold 500, this can change if consider the <script type="math/tex">\Delta u</script> in the cost function.</li>
+  <li>The input and the system</li>
+  <li>The control input increase with the time, but if the input increase the state <script type="math/tex">h</script> go to zero and uncontrollable. This is because the state <script type="math/tex">h</script> are denominator in the part of the inputs of the state <script type="math/tex">C_b</script>.</li>
+  <li>Comparison with MATLAB result</li>
+  <li>In parte this simulation is the same or trying to be the same as the example in MATLAB called <a href="https://www.mathworks.com/help/deeplearning/ug/design-neural-network-predictive-controller-in-simulink.html#:~:text=The%20controller%20consists%20of%20the,described%20in%20the%20following%20section."><strong><u> design neural network predictive controller in simulink </u></strong></a>. The result aren’t the same. This can be because the cost function no are the same or in the MATLAB example use more than one future prediction and input.</li>
+</ul>
+
+<h3 id="references">References</h3>
+<p>All the references are linked in the text with underline and bold style, <strong><u>like this</u></strong></p>
+
+<h3 id="code">Code</h3>
+<p>The complete code is in my <a href="https://github.com/MiguelAngelPimentelVallejo/Simple-NGPC-control"><strong><u>GitHub</u></strong></a></p>
+
+            <hr />
+			<div class="pg-center">
+
+<div class="comments">
+  <h2>Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>
+var disqus_config = function () {
+  this.page.url = 'http://localhost:4000/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC.html'; // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = '/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() {
+  var d = document, s = d.createElement('script');
+  s.src = '//disqus-demo-page.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
+
+</div>
+<style>
+.pg-center{
+background:#ffffff;
+padding-top:2rem;
+padding-bottom:2rem;
+margin-top:2rem;
+}
+</style>
+
+		<hr />		    
+            </div>
+          </article><!-- /.card -->
+        </div>
+		        <div class="col-md-3 ml-auto">
+
+          <aside class="sidebar">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title">About</h4>
+                <p class="card-text">It's about all things that I make</p>
+              </div>
+            </div>
+          </aside>
+
+		  
+          <aside class="sidebar sidebar-sticky">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title">Categories</h4>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Personal">
+                Personal,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Proob">
+                Proob,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#HIL">
+                HIL,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Microcontroller">
+                Microcontroller,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#ESP-32">
+                ESP-32,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#FreeRTOS">
+                FreeRTOS,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#UDP-IP">
+                UDP-IP,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Power-Electronics">
+                Power-Electronics,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Control">
+                Control,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Neural-Networks">
+                Neural-Networks,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Predictive-Control">
+                Predictive-Control,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Python">
+                Python,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Neurolab">
+                Neurolab</a>
+				
+              </div>
+            </div>
+            <div class="card mb-4">
+              <div class="card-body">
+                
+				<h4 class="card-title">Latest posts</h4>
+				
+                <a href="/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC.html" class="d-inline-block">
+                  <h4 class="h6">Neural Generalized Predictive Control</h4>
+                  
+				  <img class="card-img" src="/img/3.png" alt="" />
+				  
+                </a>
+				<br />
+                <time>On 30 Jun 2020</time> in Control
+				<hr />
+				
+                <a href="/hil/microcontroller/esp-32/freertos/udp-ip/power-electronics/2020/06/09/Em-Sys-HIL.html" class="d-inline-block">
+                  <h4 class="h6">Embedded System for Hardware In the Loop (HIL) for generator</h4>
+                  
+				  <img class="card-img" src="/img/2.png" alt="" />
+				  
+                </a>
+				<br />
+                <time>On 09 Jun 2020</time> in HIL
+				<hr />
+				
+              </div>
+            </div>
+          </aside>
+
+        </div>
+	
+      </div>
+    </div>
+  </main>
+<!-- Parse the Latex divs with Katex-->
+<script type="text/javascript">
+  $("script[type='math/tex']").replaceWith(
+    function(){
+      var tex = $(this).text();
+      return "<span class=\"inline-equation\">" + 
+              katex.renderToString(tex) +
+              "</span>";
+  });
+    
+  $("script[type='math/tex; mode=display']").replaceWith(
+    function(){
+      var tex = $(this).text();
+      return "<div class=\"equation\">" + 
+              katex.renderToString("\\displaystyle "+tex) +
+              "</div>";
+  });
+  </script>
+
+<!--   <div class="site-newsletter">
+    <div class="container">
+      <div class="text-center">
+        <h3 class="h4 mb-2">Subscribe to our newsletter</h3>
+        <p class="text-muted">Join our monthly newsletter and never miss out on new stories and promotions.</p>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5 ml-auto mr-auto">
+            <div class="input-group mb-3 mt-3">
+              <input type="text" class="form-control" placeholder="Email address" aria-label="Email address">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Subscribe</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ -->
+  <footer class="site-footer bg-darkest" role="contentinfo">
+    <div class="container">
+
+<!--       <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Privacy policy</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Feedback</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul> -->
+      <div class="copy">
+        &copy; Miguel Angel Pimentel Vallejo 2019<br />
+        All rights reserved
+      </div>
+    </div>
+  </footer>
+  
+  <script src="/js/bundle.js"></script>
+
+
+</body>
+</html>

@@ -9,6 +9,13 @@
   <title>Miguel Angel Pimentel Vallejo | Blog</title>
 
   <link href="/css/milo.css" rel="stylesheet">
+
+  <!-- Load jQuery -->
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <!-- Load KaTeX -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.js"></script>
+ 
 </head>
 
 <body>
@@ -49,6 +56,44 @@
 
       <div class="row">
         <div class="col-md-9">
+
+          <article class="card mb-4">
+            <header class="card-header">
+              <div class="card-meta">
+                <time>Published on 30 Jun 2020</time>
+                <span>
+                  in - 
+                  
+                  
+                  <a href="/categories/#Control">Control</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Neural-Networks">Neural-Networks</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Predictive-Control">Predictive-Control</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Python">Python</a>
+                  &nbsp;
+                  
+                  <a href="/categories/#Neurolab">Neurolab</a>
+                  
+                  
+                </span>
+
+              </div>
+              <a href="/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC.html">
+                <h4 class="card-title">Neural Generalized Predictive Control</h4>
+              </a>
+            </header>
+            <a href="/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC.html">
+              <img class="card-img" src="/img/3.png" alt="" />
+            </a>
+            <div class="card-body">
+              <p class="card-text">In this post, I show how to do simple a Neural Generalized Predictive Control (NGPC) using Neurolab in python, To do this post I’m basing in the paper Neural Generalized Predictive Control A Newton-Raphson Implementation of Donald Soloway and Pamela...</p>
+            </div>
+          </article>
 
           <article class="card mb-4">
             <header class="card-header">
@@ -174,7 +219,27 @@ Here come more post I promise
 				
 				    
                 <a class="btn btn-light btn-sm mb-1" href="/categories/#Power-Electronics">
-                Power-Electronics</a>
+                Power-Electronics,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Control">
+                Control,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Neural-Networks">
+                Neural-Networks,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Predictive-Control">
+                Predictive-Control,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Python">
+                Python,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Neurolab">
+                Neurolab</a>
 				
               </div>
             </div>
@@ -182,6 +247,16 @@ Here come more post I promise
               <div class="card-body">
                 
 				<h4 class="card-title">Latest posts</h4>
+				
+                <a href="/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC.html" class="d-inline-block">
+                  <h4 class="h6">Neural Generalized Predictive Control</h4>
+                  
+				  <img class="card-img" src="/img/3.png" alt="" />
+				  
+                </a>
+				<br />
+                <time>On 30 Jun 2020</time> in Control
+				<hr />
 				
                 <a href="/hil/microcontroller/esp-32/freertos/udp-ip/power-electronics/2020/06/09/Em-Sys-HIL.html" class="d-inline-block">
                   <h4 class="h6">Embedded System for Hardware In the Loop (HIL) for generator</h4>
@@ -191,16 +266,6 @@ Here come more post I promise
                 </a>
 				<br />
                 <time>On 09 Jun 2020</time> in HIL
-				<hr />
-				
-                <a href="/personal/proob/2020/06/05/First-Post.html" class="d-inline-block">
-                  <h4 class="h6">My first post</h4>
-                  
-				  <img class="card-img" src="/img/1.png" alt="" />
-				  
-                </a>
-				<br />
-                <time>On 05 Jun 2020</time> in Personal
 				<hr />
 				
               </div>
@@ -241,6 +306,25 @@ margin-top:2rem;
 </style>
 
 		</main>
+<!-- Parse the Latex divs with Katex-->
+<script type="text/javascript">
+  $("script[type='math/tex']").replaceWith(
+    function(){
+      var tex = $(this).text();
+      return "<span class=\"inline-equation\">" + 
+              katex.renderToString(tex) +
+              "</span>";
+  });
+    
+  $("script[type='math/tex; mode=display']").replaceWith(
+    function(){
+      var tex = $(this).text();
+      return "<div class=\"equation\">" + 
+              katex.renderToString("\\displaystyle "+tex) +
+              "</div>";
+  });
+  </script>
+
 <!--   <div class="site-newsletter">
     <div class="container">
       <div class="text-center">
@@ -283,6 +367,7 @@ margin-top:2rem;
   </footer>
   
   <script src="/js/bundle.js"></script>
+
 
 
  

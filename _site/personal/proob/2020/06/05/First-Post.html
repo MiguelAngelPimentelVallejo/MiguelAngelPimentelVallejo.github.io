@@ -9,6 +9,13 @@
   <title>Miguel Angel Pimentel Vallejo | My first post</title>
 
   <link href="/css/milo.css" rel="stylesheet">
+
+  <!-- Load jQuery -->
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <!-- Load KaTeX -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.js"></script>
+ 
 </head>
 
 <body>
@@ -280,7 +287,27 @@ margin-top:2rem;
 				
 				    
                 <a class="btn btn-light btn-sm mb-1" href="/categories/#Power-Electronics">
-                Power-Electronics</a>
+                Power-Electronics,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Control">
+                Control,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Neural-Networks">
+                Neural-Networks,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Predictive-Control">
+                Predictive-Control,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Python">
+                Python,</a>
+				
+				    
+                <a class="btn btn-light btn-sm mb-1" href="/categories/#Neurolab">
+                Neurolab</a>
 				
               </div>
             </div>
@@ -288,6 +315,16 @@ margin-top:2rem;
               <div class="card-body">
                 
 				<h4 class="card-title">Latest posts</h4>
+				
+                <a href="/control/neural-networks/predictive-control/python/neurolab/2020/06/30/NMPC.html" class="d-inline-block">
+                  <h4 class="h6">Neural Generalized Predictive Control</h4>
+                  
+				  <img class="card-img" src="/img/3.png" alt="" />
+				  
+                </a>
+				<br />
+                <time>On 30 Jun 2020</time> in Control
+				<hr />
 				
                 <a href="/hil/microcontroller/esp-32/freertos/udp-ip/power-electronics/2020/06/09/Em-Sys-HIL.html" class="d-inline-block">
                   <h4 class="h6">Embedded System for Hardware In the Loop (HIL) for generator</h4>
@@ -299,16 +336,6 @@ margin-top:2rem;
                 <time>On 09 Jun 2020</time> in HIL
 				<hr />
 				
-                <a href="/personal/proob/2020/06/05/First-Post.html" class="d-inline-block">
-                  <h4 class="h6">My first post</h4>
-                  
-				  <img class="card-img" src="/img/1.png" alt="" />
-				  
-                </a>
-				<br />
-                <time>On 05 Jun 2020</time> in Personal
-				<hr />
-				
               </div>
             </div>
           </aside>
@@ -318,6 +345,25 @@ margin-top:2rem;
       </div>
     </div>
   </main>
+<!-- Parse the Latex divs with Katex-->
+<script type="text/javascript">
+  $("script[type='math/tex']").replaceWith(
+    function(){
+      var tex = $(this).text();
+      return "<span class=\"inline-equation\">" + 
+              katex.renderToString(tex) +
+              "</span>";
+  });
+    
+  $("script[type='math/tex; mode=display']").replaceWith(
+    function(){
+      var tex = $(this).text();
+      return "<div class=\"equation\">" + 
+              katex.renderToString("\\displaystyle "+tex) +
+              "</div>";
+  });
+  </script>
+
 <!--   <div class="site-newsletter">
     <div class="container">
       <div class="text-center">
@@ -360,6 +406,7 @@ margin-top:2rem;
   </footer>
   
   <script src="/js/bundle.js"></script>
+
 
 </body>
 </html>
